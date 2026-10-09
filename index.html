@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M666 Official Elite Casino</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #05070b; color: #fff; padding-bottom: 75px; }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #111827, #0b0f19); padding: 12px 15px; border-bottom: 2px solid #f59e0b; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(245,158,11,0.2); }
+        .logo { font-size: 26px; font-weight: 900; color: #f59e0b; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 12px rgba(245,158,11,0.6); }
+        .logo span { color: #ef4444; }
+        .user-info { display: flex; align-items: center; gap: 8px; }
+        .balance-badge { background: #111827; border: 1px solid #059669; border-radius: 20px; padding: 5px 12px; font-size: 13px; color: #34d399; font-weight: bold; box-shadow: inset 0 0 8px rgba(52,211,153,0.2); }
+        .btn-deposit-top { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: bold; border: none; padding: 6px 14px; border-radius: 15px; cursor: pointer; font-size: 13px; box-shadow: 0 0 10px rgba(245,158,11,0.5); }
+
+        .ticker-bar { background: #1f2937; color: #34d399; font-size: 11px; padding: 7px 10px; overflow: hidden; white-space: nowrap; border-bottom: 1px solid #374151; font-weight: bold; }
+        .ticker-content { display: inline-block; animation: marquee 20s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .promo-banner { background: radial-gradient(circle, #b91c1c, #450a0a); padding: 18px 12px; margin: 10px; border-radius: 14px; text-align: center; border: 2px solid #f59e0b; box-shadow: 0 0 20px rgba(239,68,68,0.4); position: relative; overflow: hidden; }
+        .promo-banner h3 { color: #f59e0b; font-size: 20px; font-weight: 900; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.8); margin-bottom: 4px; }
+        .promo-banner p { font-size: 13px; color: #fca5a5; font-weight: 600; }
+        .jackpot-pool { font-size: 22px; font-weight: 900; color: #34d399; margin-top: 6px; text-shadow: 0 0 10px rgba(52,211,153,0.6); }
+
+        .categories { display: flex; gap: 8px; overflow-x: auto; padding: 8px 10px; background: #0b0f19; margin-bottom: 5px; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        .cat-btn { background: #1f2937; color: #9ca3af; border: 1px solid #374151; padding: 7px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; transition: 0.2s; }
+        .cat-btn.active { background: #ef4444; color: #fff; border-color: #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.6); }
+
+        .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px; }
+        .game-card { background: linear-gradient(145deg, #1f2937, #111827); border-radius: 12px; overflow: hidden; border: 1px solid #374151; text-align: center; padding-bottom: 8px; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .game-card:active { transform: scale(0.95); border-color: #f59e0b; box-shadow: 0 0 15px rgba(245,158,11,0.5); }
+        .game-icon { height: 75px; display: flex; align-items: center; justify-content: center; font-size: 32px; background: radial-gradient(circle, #374151, #0b0f19); }
+        .game-title { font-size: 11px; font-weight: 900; margin-top: 6px; color: #f3f4f6; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; padding: 0 4px; text-transform: uppercase; }
+
+        .page-modal { display: none; padding: 15px; }
+        .page-modal.active { display: block; }
+        .card { background: #111827; padding: 20px; border-radius: 16px; border: 1px solid #374151; text-align: center; max-width: 420px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #4b5563; font-size: 14px; background: #05070b; color: #fff; text-align: center; font-weight: bold; }
+        input:focus, select:focus { outline: none; border-color: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.4); }
+        .btn-action { width: 100%; padding: 13px; font-size: 15px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; background: #f97316; color: #fff; margin-top: 10px; box-shadow: 0 4px 12px rgba(249,115,22,0.4); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111827; display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid #374151; z-index: 100; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); }
+        .nav-item { color: #9ca3af; border: none; background: none; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+        .nav-item.active { color: #f59e0b; font-weight: bold; text-shadow: 0 0 8px rgba(245,158,11,0.5); }
+        .nav-icon { font-size: 18px; }
+
+        .aviator-screen { background: #0b0f19; height: 180px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; border: 2px solid #374151; margin-bottom: 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.9); overflow: hidden; }
+        .aviator-plane { font-size: 45px; position: absolute; animation: flyPlane 3s ease-in-out infinite alternate; }
+        @keyframes flyPlane { 0% { transform: translate(-30px, 20px) rotate(-10deg); } 100% { transform: translate(30px, -20px) rotate(5deg); } }
+        .multiplier { font-size: 38px; font-weight: 900; color: #fff; text-shadow: 0 0 15px rgba(245,158,11,0.8); z-index: 2; }
+        
+        .quick-bets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+        .q-btn { background: #1f2937; border: 1px solid #4b5563; color: #fff; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .q-btn:active { background: #f97316; }
+
+        .aviator-stats-box { display: flex; justify-content: space-around; background: #111827; padding: 10px; border-radius: 8px; margin-top: 15px; border: 1px solid #374151; font-size: 11px; }
+        .stat-item { text-align: center; }
+        .stat-item b { color: #f59e0b; display: block; font-size: 13px; }
+
+        .live-table { width: 100%; margin-top: 10px; font-size: 11px; text-align: left; border-collapse: collapse; }
+        .live-table th { color: #9ca3af; padding: 4px; border-bottom: 1px solid #374151; }
+        .live-table td { padding: 6px 4px; border-bottom: 1px solid #1f2937; }
+
+        .mines-grid-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 15px 0; }
+        .mine-cell { background: #1f2937; border: 1px solid #4b5563; height: 45px; border-radius: 6px; font-size: 18px; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        .auth-toggle { display: flex; justify-content: space-around; margin-bottom: 15px; border-bottom: 1px solid #374151; }
+        .auth-tab { background: none; border: none; color: #9ca3af; font-size: 15px; font-weight: bold; padding: 10px; cursor: pointer; width: 50%; }
+        .auth-tab.active { color: #f59e0b; border-bottom: 2px solid #f59e0b; }
+    </style>
+</head>
+<body>
+
+    <!-- AUTH SCREEN -->
+    <div id="authPage" class="page-modal active" style="margin-top: 30px;">
+        <div class="card">
+            <div class="logo" style="font-size: 38px; margin-bottom: 10px;">M<span>666</span></div>
+            <p style="font-size: 12px; color: #9ca3af; margin-bottom: 15px; font-weight: bold;">ASIA'S NO.1 ELITE GAMING PLATFORM</p>
+            
+            <div class="auth-toggle">
+                <button type="button" id="tabLoginBtn" class="auth-tab active" onclick="switchTab('login')">LOGIN</button>
+                <button type="button" id="tabRegBtn" class="auth-tab" onclick="switchTab('register')">REGISTER</button>
+            </div>
+
+            <div id="loginFormSection">
+                <input type="text" id="loginPhone" placeholder="Mobile Number (03XXXXXXXXX)">
+                <input type="password" id="loginPass" placeholder="Password">
+                <button type="button" class="btn-action" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#000;" onclick="loginUser()">SECURE LOGIN</button>
+            </div>
+
+            <div id="registerFormSection" style="display: none;">
+                <input type="text" id="regPhone" placeholder="Mobile Number">
+                <input type="password" id="regPass" placeholder="Create Password">
+                <button type="button" class="btn-action" style="background:linear-gradient(135deg, #ef4444, #b91c1c); color:#fff;" onclick="registerUser()">CLAIM 300 PKR BONUS</button>
+            </div>
+
+            <div id="authMsg" style="margin-top: 15px; font-size: 13px; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" style="display: none;">
+
+        <div class="top-bar">
+            <div class="logo">M<span>666</span></div>
+            <div class="user-info">
+                <div class="balance-badge">PKR <span id="userBalance">300</span></div>
+                <button type="button" class="btn-deposit-top" onclick="showPage('deposit')">DEPOSIT</button>
+            </div>
+        </div>
+
+        <div class="ticker-bar">
+            <div class="ticker-content">🔥 HOT WINNER: User 0321***882 won PKR 125,000 on Aviator! 🚀 Claim Daily Mega Cashback & Instant Withdrawals 24/7! ⚡</div>
+        </div>
+
+        <div id="homePage" class="page-modal">
+            <div class="promo-banner">
+                <h3>⚡ MEGA JACKPOT POOL ⚡</h3>
+                <p>Play any game & win up to 500x multiplier instantly!</p>
+                <div class="jackpot-pool">PKR 14,852,900</div>
+            </div>
+
+            <!-- Share & Earn Section -->
+            <div style="background:#1f2937; padding:12px; margin:10px; border-radius:10px; border:1px solid #374151; text-align:center;">
+                <h4 style="color:#f59e0b; font-size:14px; margin-bottom:5px;">📢 REFER & EARN BONUS</h4>
+                <p style="font-size:11px; color:#9ca3af; margin-bottom:8px;">Share your link with friends & get PKR 100 per invite!</p>
+                <input type="text" id="referralLinkBox" readonly style="font-size:11px; padding:8px; margin-bottom:6px; background:#0b0f19;">
+                <button type="button" class="btn-action" style="background:#34d399; color:#000; padding:8px; font-size:12px; margin-top:0;" onclick="shareReferralLink()">SHARE ON WHATSAPP</button>
+            </div>
+
+            <div class="categories">
+                <button type="button" class="cat-btn active" onclick="filterCat('all', this)">🔥 All Games</button>
+                <button type="button" class="cat-btn" onclick="filterCat('crash', this)">🚀 Crash</button>
+                <button type="button" class="cat-btn" onclick="filterCat('mini', this)">🪙 Mini</button>
+                <button type="button" class="cat-btn" onclick="filterCat('slots', this)">🎰 Slots</button>
+                <button type="button" class="cat-btn" onclick="filterCat('cards', this)">🃏 Cards</button>
+                <button type="button" class="cat-btn" onclick="filterCat('fish', this)">🐟 Fishing</button>
+            </div>
+
+            <div class="games-grid">
+                <div class="game-card crash" onclick="openGame('aviator', '🚀 Aviator Arena')"><div class="game-icon" style="background: radial-gradient(circle, #b91c1c, #05070b);">🚀</div><div class="game-title">Aviator</div></div>
+                <div class="game-card crash" onclick="openGame('aviator', '🛩️ JetX Turbo')"><div class="game-icon" style="background: radial-gradient(circle, #0284c7, #05070b);">🛩️</div><div class="game-title">JetX</div></div>
+                <div class="game-card mini" onclick="openGame('coinflip', '🪙 Coin Flip Master')"><div class="game-icon" style="background: radial-gradient(circle, #d97706, #05070b);">🪙</div><div class="game-title">Coin Flip</div></div>
+                <div class="game-card mini" onclick="openGame('mines', '💣 Mines Sweeper Pro')"><div class="game-icon" style="background: radial-gradient(circle, #115e59, #05070b);">💣</div><div class="game-title">Mines Sweeper</div></div>
+                <div class="game-card mini" onclick="openGame('wheel', '🎡 Lucky Spin Wheel')"><div class="game-icon" style="background: radial-gradient(circle, #9a3412, #05070b);">🎡</div><div class="game-title">Spin Wheel</div></div>
+                <div class="game-card mini" onclick="openGame('dice', '🎲 Dice High/Low')"><div class="game-icon" style="background: radial-gradient(circle, #c2410c, #05070b);">🎲</div><div class="game-title">Dice Roll</div></div>
+                <div class="game-card mini" onclick="openGame('color', '🎨 Color Prediction')"><div class="game-icon" style="background: radial-gradient(circle, #581c87, #05070b);">🎨</div><div class="game-title">Color Predict</div></div>
+                <div class="game-card slots" onclick="openGame('general', '🎰 Slots 777 Deluxe')"><div class="game-icon" style="background: radial-gradient(circle, #1e3a8a, #05070b);">🎰</div><div class="game-title">Slots 777</div></div>
+                <div class="game-card cards" onclick="openGame('general', '🐉 Dragon vs Tiger Table')"><div class="game-icon" style="background: radial-gradient(circle, #701a75, #05070b);">🐉</div><div class="game-title">Dragon vs Tiger</div></div>
+                <div class="game-card fish" onclick="openGame('general', '🦈 Ocean King Fishing')"><div class="game-icon" style="background: radial-gradient(circle, #0369a1, #05070b);">🦈</div><div class="game-title">Ocean King</div></div>
+                
+                <div class="game-card cards" onclick="openGame('general', '👑 Teen Patti King')"><div class="game-icon" style="background: radial-gradient(circle, #990000, #05070b);">👑</div><div class="game-title">Teen Patti</div></div>
+                <div class="game-card mini" onclick="openGame('general', '🎲 Ludo Jackpot Pro')"><div class="game-icon" style="background: radial-gradient(circle, #1d4ed8, #05070b);">🎲</div><div class="game-title">Ludo Jackpot</div></div>
+                <div class="game-card slots" onclick="openGame('general', '🍎 Fruit Party Slots')"><div class="game-icon" style="background: radial-gradient(circle, #c2410c, #05070b);">🍎</div><div class="game-title">Fruit Party</div></div>
+                <div class="game-card cards" onclick="openGame('general', '🃏 Baccarat Gold')"><div class="game-icon" style="background: radial-gradient(circle, #5b21b6, #05070b);">🃏</div><div class="game-title">Baccarat</div></div>
+                <div class="game-card cards" onclick="openGame('general', '🎴 Andar Bahar Live')"><div class="game-icon" style="background: radial-gradient(circle, #be185d, #05070b);">🎴</div><div class="game-title">Andar Bahar</div></div>
+                <div class="game-card mini" onclick="openGame('general', '🎯 European Roulette')"><div class="game-icon" style="background: radial-gradient(circle, #15803d, #05070b);">🎯</div><div class="game-title">Roulette</div></div>
+                <div class="game-card mini" onclick="openGame('general', '🔢 7 Up 7 Down')"><div class="game-icon" style="background: radial-gradient(circle, #0369a1, #05070b);">🔢</div><div class="game-title">7 Up 7 Down</div></div>
+                <div class="game-card cards" onclick="openGame('general', '♠️ Blackjack Pro')"><div class="game-icon" style="background: radial-gradient(circle, #374151, #05070b);">♠️</div><div class="game-title">Blackjack</div></div>
+                <div class="game-card mini" onclick="openGame('general', '⚪ Plinko Master')"><div class="game-icon" style="background: radial-gradient(circle, #c2410c, #05070b);">⚪</div><div class="game-title">Plinko</div></div>
+                <div class="game-card mini" onclick="openGame('general', '🎱 Keno Lucky Draw')"><div class="game-icon" style="background: radial-gradient(circle, #9d174d, #05070b);">🎱</div><div class="game-title">Keno Draw</div></div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC GAME PAGE -->
+        <div id="dynamicGamePage" class="page-modal">
+            <div class="card" style="max-width: 440px;">
+                <h3 id="gameWindowTitle" style="color:#f59e0b; margin-bottom:10px; text-transform:uppercase;">Game Arena</h3>
+                <div id="gameInterfaceBody" style="min-height: 220px;"></div>
+                <button type="button" class="btn-action" style="background:#374151; color:#fff; margin-top:15px;" onclick="showPage('home')">BACK TO LOBBY</button>
+            </div>
+        </div>
+
+        <!-- DEPOSIT PAGE -->
+        <div id="depositPage" class="page-modal">
+            <div class="card">
+                <h3 style="color:#f59e0b; margin-bottom:10px;">💳 INSTANT DEPOSIT</h3>
+                <p style="font-size:13px; color:#9ca3af; margin-bottom:10px;">
+                    Send payment via JazzCash/Easypaisa:<br>
+                    Number: <b style="color:#34d399;">03131354057</b><br>
+                    Title: <b style="color:#34d399;">AMINA AMINA</b>
+                </p>
+                <input type="number" id="depAmount" placeholder="Amount (Min 500)">
+                <input type="text" id="depTrx" placeholder="Enter 12-Digit TRX ID">
+                <button type="button" class="btn-action" onclick="submitDeposit()">SUBMIT DEPOSIT</button>
+                <button type="button" class="btn-action" style="background:#374151; color:#fff;" onclick="showPage('home')">BACK TO LOBBY</button>
+            </div>
+        </div>
+
+        <!-- WITHDRAW PAGE & HISTORY -->
+        <div id="withdrawPage" class="page-modal">
+            <div class="card">
+                <h3 style="color:#f59e0b; margin-bottom:10px;">🏧 FAST WITHDRAWAL</h3>
+                <select id="withdrawMethod">
+                    <option value="JazzCash">JazzCash</option>
+                    <option value="Easypaisa">Easypaisa</option>
+                </select>
+                <input type="text" id="withdrawAccount" placeholder="Account Number">
+                <input type="number" id="withdrawAmount" placeholder="Amount (Min 500)">
+                <input type="password" id="withdrawPin" placeholder="Set / Enter 4-Digit PIN" maxlength="4">
+                <button type="button" class="btn-action" style="background:#10b981; color:#000;" onclick="submitWithdraw()">REQUEST WITHDRAWAL</button>
+                
+                <h4 style="color:#f59e0b; margin-top:20px; text-align:left; font-size:14px;">📜 Withdrawal History:</h4>
+                <div id="withdrawHistoryList" style="text-align:left; font-size:12px; max-height:120px; overflow-y:auto; margin-top:5px;">
+                    <p style="color:#9ca3af;">No history yet.</p>
+                </div>
+
+                <button type="button" class="btn-action" style="background:#374151; color:#fff; margin-top:15px;" onclick="showPage('home')">BACK TO LOBBY</button>
+            </div>
+        </div>
+
+        <!-- ADMIN PANEL -->
+        <div id="adminPage" class="page-modal">
+            <div class="card" style="max-width: 440px;">
+                <h3 style="color:#ef4444; margin-bottom:10px;">👑 Secret Admin Control</h3>
+                
+                <div id="adminAuthLock">
+                    <p style="font-size: 13px; color:#9ca3af; margin-bottom:10px;">Enter Secret PIN:</p>
+                    <input type="password" id="adminPinInput" placeholder="Enter PIN">
+                    <button type="button" class="btn-action" style="background:#ef4444; color:#fff;" onclick="verifyAdminPin()">VERIFY PIN</button>
+                    <div id="adminPassMsg" style="margin-top: 10px; font-weight: bold;"></div>
+                </div>
+
+                <div id="adminContentSection" style="display: none;">
+                    <h4 style="color:#f59e0b; margin-bottom: 8px; text-align:left;">👥 Registered Users Directory:</h4>
+                    <div id="allUsersList" style="text-align:left; font-size:12px; max-height:130px; overflow-y:auto; margin-bottom:15px; border:1px solid #374151; padding:6px; border-radius:6px; background:#0b0f19;">
+                        <p style="color:#9ca3af;">No users found.</p>
+                    </div>
+
+                    <h4 style="color:#34d399; margin-bottom: 8px; text-align:left;">Pending Deposit Requests:</h4>
+                    <div id="depositRequestsList" style="text-align:left; font-size:12px; margin-bottom:15px;">
+                        <p style="color:#9ca3af;">No pending deposits.</p>
+                    </div>
+
+                    <h4 style="color:#ef4444; margin-bottom: 8px; text-align:left;">Pending Withdraw Requests:</h4>
+                    <div id="withdrawRequestsList" style="text-align:left; font-size:12px;">
+                        <p style="color:#9ca3af;">No pending withdrawals.</p>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-action" style="background:#374151; color:#fff; margin-top:15px;" onclick="showPage('home')">BACK TO LOBBY</button>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div class="bottom-nav">
+            <button type="button" class="nav-item active" onclick="handleHomeNav()">
+                <span class="nav-icon">🏠</span>
+                <span>Lobby</span>
+            </button>
+            <button type="button" class="nav-item" onclick="showPage('deposit')">
+                <span class="nav-icon">💳</span>
+                <span>Deposit</span>
+            </button>
+            <button type="button" class="nav-item" onclick="openWithdrawPage()">
+                <span class="nav-icon">🏧</span>
+                <span>Withdraw</span>
+            </button>
+            <button type="button" class="nav-item" onclick="logoutUser()">
+                <span class="nav-icon">🚪</span>
+                <span>Logout</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentBalance = 300;
+        let currentUserPhone = "";
+        let currentUserPin = "";
+        let depositRequests = [];
+        let withdrawRequests = [];
+        let userWithdrawHistory = [];
+
+        const ADMIN_SECRET_PIN = "6666";
+        let isAdminUnlocked = false;
+
+        let homeClickCount = 0;
+        let homeClickTimer = null;
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-modal').forEach(p => p.classList.remove('active'));
+            let authScreen = document.getElementById('authPage');
+            let mainAppDiv = document.getElementById('mainApp');
+
+            if (pageId === 'auth') {
+                authScreen.style.display = 'block';
+                mainAppDiv.style.display = 'none';
+            } else {
+                authScreen.style.display = 'none';
+                mainAppDiv.style.display = 'block';
+                let target = document.getElementById(pageId + 'Page');
+                if(target) target.classList.add('active');
+
+                if(pageId === 'home') {
+                    let refBox = document.getElementById('referralLinkBox');
+                    if(refBox) {
+                        refBox.value = window.location.href.split('?')[0] + "?ref=" + currentUserPhone;
+                    }
+                }
+            }
+        }
+
+        function shareReferralLink() {
+            let refLink = document.getElementById('referralLinkBox').value;
+            let whatsappMsg = encodeURIComponent("🔥 M666 Official Casino join karo aur 300 PKR Free Bonus pao! Mera link yeh hai: " + refLink);
+            window.open("https://api.whatsapp.com/send?text=" + whatsappMsg, "_blank");
+        }
+
+        function handleHomeNav() {
+            showPage('home');
+            homeClickCount++;
+            clearTimeout(homeClickTimer);
+            homeClickTimer = setTimeout(() => { homeClickCount = 0; }, 1500);
+            if (homeClickCount >= 5) { homeClickCount = 0; openAdminPanel(); }
+        }
+
+        function switchTab(tab) {
+            let msg = document.getElementById("authMsg");
+            if(msg) msg.innerText = "";
+            if (tab === 'login') {
+                document.getElementById("loginFormSection").style.display = "block";
+                document.getElementById("registerFormSection").style.display = "none";
+                document.getElementById("tabLoginBtn").classList.add("active");
+                document.getElementById("tabRegBtn").classList.remove("active");
+            } else {
+                document.getElementById("loginFormSection").style.display = "none";
+                document.getElementById("registerFormSection").style.display = "block";
+                document.getElementById("tabRegBtn").classList.add("active");
+                document.getElementById("tabLoginBtn").classList.remove("active");
+            }
+        }
+
+        function registerUser() {
+            let phone = document.getElementById("regPhone").value.trim();
+            let pass = document.getElementById("regPass").value.trim();
+            let msg = document.getElementById("authMsg");
+
+            if (!phone || !pass) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Phone aur Password enter karein!";
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("m666_users") || "{}");
+            if (users[phone]) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Yeh number pehle se registered hai! Login karein.";
+                return;
+            }
+
+            users[phone] = { pass: pass, balance: 300, pin: "", history: [] };
+            localStorage.setItem("m666_users", JSON.stringify(users));
+
+            msg.style.color = "#34d399";
+            msg.innerText = "Bonus Added! Ab Login tab par click karein.";
+            document.getElementById("regPhone").value = "";
+            document.getElementById("regPass").value = "";
+        }
+
+        function loginUser() {
+            let phone = document.getElementById("loginPhone").value.trim();
+            let pass = document.getElementById("loginPass").value.trim();
+            let msg = document.getElementById("authMsg");
+
+            if (!phone || !pass) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Phone aur Password enter karein!";
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("m666_users") || "{}");
+            if (!users[phone]) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Account mojood nahi! Pehle Register karein.";
+                return;
+            }
+
+            if (users[phone].pass === pass) {
+                currentUserPhone = phone;
+                currentBalance = users[phone].balance;
+                currentUserPin = users[phone].pin || "";
+                userWithdrawHistory = users[phone].history || [];
+
+                document.getElementById("userBalance").innerText = currentBalance;
+                showPage('home');
+            } else {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Ghalat Password!";
+            }
+        }
+
+        function saveUserData() {
+            if(!currentUserPhone) return;
+            let users = JSON.parse(localStorage.getItem("m666_users") || "{}");
+            if(users[currentUserPhone]) {
+                users[currentUserPhone].balance = currentBalance;
+                users[currentUserPhone].pin = currentUserPin;
+                users[currentUserPhone].history = userWithdrawHistory;
+                localStorage.setItem("m666_users", JSON.stringify(users));
+            }
+        }
+
+        function logoutUser() {
+            saveUserData();
+            currentUserPhone = "";
+            showPage('auth');
+            switchTab('login');
+            isAdminUnlocked = false;
+        }
+
+        function openWithdrawPage() {
+            showPage('withdraw');
+            renderWithdrawHistory();
+        }
+
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.game-card').forEach(card => {
+                if (cat === 'all' || card.classList.contains(cat)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openGame(type, title) {
+            document.getElementById("gameWindowTitle").innerText = title;
+            let container = document.getElementById("gameInterfaceBody");
+            
+            if (type === 'aviator') {
+                container.innerHTML = `
+                    <div class="aviator-screen">
+                        <div class="aviator-plane">✈️</div>
+                        <div id="multiDisplay" class="multiplier">1.00x</div>
+                    </div>
+                    
+                    <div class="quick-bets">
+                        <button type="button" class="q-btn" onclick="setBet(60)">60</button>
+                        <button type="button" class="q-btn" onclick="setBet(300)">300</button>
+                        <button type="button" class="q-btn" onclick="setBet(800)">800</button>
+                        <button type="button" class="q-btn" onclick="setBet(2000)">2000</button>
+                        <button type="button" class="q-btn" onclick="setBet(8000)">8000</button>
+                        <button type="button" class="q-btn" onclick="setBet(30000)">30000</button>
+                    </div>
+
+                    <input type="number" id="aviatorBet" value="100" placeholder="Bet Amount">
+                    <button type="button" class="btn-action" id="aviatorPlayBtn" onclick="startAviatorGame()">PLACE A BET</button>
+                    <button type="button" class="btn-action" style="background:#f59e0b; color:#000; display:none;" id="btnCashout" onclick="cashoutAviator()">CASHOUT</button>
+                    <div id="aviatorMsg" style="margin-top:8px; font-weight:bold; font-size:13px; text-align:center;"></div>
+
+                    <div class="aviator-stats-box">
+                        <div class="stat-item">Number of bets <b>1176</b></div>
+                        <div class="stat-item">Total bets <b>1,590,042 PKR</b></div>
+                        <div class="stat-item">Total winnings <b>4,858,286 PKR</b></div>
+                    </div>
+
+                    <table class="live-table">
+                        <thead>
+                            <tr><th>USERNAME</th><th>ODDS</th><th>BET</th><th>WIN</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1800860953</td><td style="color:#34d399;">x3.75</td><td>3000 PKR</td><td style="color:#34d399;">11250 PKR</td></tr>
+                            <tr><td>*******39</td><td style="color:#34d399;">x5.26</td><td>112433 PKR</td><td style="color:#34d399;">591400 PKR</td></tr>
+                            <tr><td>*******35</td><td style="color:#34d399;">x1.82</td><td>14691 PKR</td><td style="color:#34d399;">26738 PKR</td></tr>
+                        </tbody>
+                    </table>
+                `;
+            } else if (type === 'coinflip') {
+                container.innerHTML = `
+                    <div class="aviator-screen" style="font-size: 40px;">🪙</div>
+                    <input type="number" id="coinBet" value="100" placeholder="Bet Amount">
+                    <div style="display:flex; gap:10px; margin-top:8px;">
+                        <button type="button" class="btn-action" style="background:#ef4444; color:#fff;" onclick="playCoin('HEAD')">HEAD</button>
+                        <button type="button" class="btn-action" style="background:#0284c7; color:#fff;" onclick="playCoin('TAIL')">TAIL</button>
+                    </div>
+                    <div id="coinResult" style="margin-top:10px; font-weight:bold; font-size:13px; text-align:center;"></div>
+                `;
+            } else if (type === 'mines') {
+                container.innerHTML = `
+                    <input type="number" id="minesBet" value="100" placeholder="Bet Amount">
+                    <div class="mines-grid-box">
+                        <button type="button" class="mine-cell" onclick="playMines(this)">❓</button>
+                        <button type="button" class="mine-cell" onclick="playMines(this)">❓</button>
+                        <button type="button" class="mine-cell" onclick="playMines(this)">❓</button>
+                        <button type="button" class="mine-cell" onclick="playMines(this)">❓</button>
+                    </div>
+                    <div id="minesResult" style="font-weight:bold; font-size:13px; color:#f59e0b; text-align:center;">Tap any box to reveal!</div>
+                `;
+            } else if (type === 'wheel') {
+                container.innerHTML = `
+                    <div class="aviator-screen" style="font-size: 40px;">🎡</div>
+                    <input type="number" id="wheelBet" value="100" placeholder="Bet Amount">
+                    <button type="button" class="btn-action" style="background:#f59e0b; color:#000;" onclick="spinWheel()">SPIN WHEEL</button>
+                    <div id="wheelResult" style="margin-top:10px; font-weight:bold; font-size:13px; text-align:center;"></div>
+                `;
+            } else if (type === 'dice') {
+                container.innerHTML = `
+                    <div class="aviator-screen" style="font-size: 40px;">🎲</div>
+                    <input type="number" id="diceBet" value="100" placeholder="Bet Amount">
+                    <div style="display:flex; gap:10px; margin-top:8px;">
+                        <button type="button" class="btn-action" style="background:#c2410c; color:#fff;" onclick="playDice('low')">1-3 (Low - 2x)</button>
+                        <button type="button" class="btn-action" style="background:#15803d; color:#fff;" onclick="playDice('high')">4-6 (High - 2x)</button>
+                    </div>
+                    <div id="diceResult" style="margin-top:10px; font-weight:bold; font-size:13px; text-align:center;"></div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="aviator-screen" style="font-size: 30px; color:#f59e0b;">⭐ ${title} ⭐</div>
+                    <input type="number" id="generalBet" value="100" placeholder="Bet Amount">
+                    <button type="button" class="btn-action" style="background:#10b981; color:#000;" onclick="playGeneralGame()">PLAY & WIN</button>
+                    <div id="generalResult" style="margin-top:10px; font-weight:bold; font-size:13px; text-align:center;"></div>
+                `;
+            }
+
+            showPage('dynamicGame');
+        }
+
+        function setBet(val) {
+            let betInput = document.getElementById("aviatorBet");
+            if(betInput) betInput.value = val;
+        }
+
+        // Game Logics
+        let aviatorInterval = null, currentMultiplier = 1.00, crashPoint = 0, aviatorBetAmount = 0, isGameRunning = false;
+
+        function startAviatorGame() {
+            let betInput = parseInt(document.getElementById("aviatorBet").value);
+            let msg = document.getElementById("aviatorMsg");
+            if (!betInput || betInput <= 0 || betInput > currentBalance) { 
+                msg.style.color = "#ef4444"; 
+                msg.innerText = "Invalid or Low Balance!"; 
+                return; 
+            }
+
+            currentBalance -= betInput; 
+            aviatorBetAmount = betInput;
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+            
+            isGameRunning = true; 
+            currentMultiplier = 1.00; 
+            msg.innerText = "";
+            crashPoint = (Math.random() * 4 + 1.2).toFixed(2);
+
+            let playBtn = document.getElementById("aviatorPlayBtn");
+            let cashBtn = document.getElementById("btnCashout");
+            if(playBtn) playBtn.style.display = "none";
+            if(cashBtn) cashBtn.style.display = "block";
+
+            if(aviatorInterval) clearInterval(aviatorInterval);
+
+            aviatorInterval = setInterval(() => {
+                currentMultiplier += 0.05;
+                let multiEl = document.getElementById("multiDisplay");
+                if(multiEl) multiEl.innerText = currentMultiplier.toFixed(2) + "x";
+
+                if (currentMultiplier >= crashPoint) {
+                    clearInterval(aviatorInterval); 
+                    isGameRunning = false;
+                    if(multiEl) multiEl.innerText = "FLEW AWAY!";
+                    msg.style.color = "#ef4444"; 
+                    msg.innerText = `Crashed at ${crashPoint}x!`;
+                    resetAviator();
+                }
+            }, 100);
+        }
+
+        function cashoutAviator() {
+            if (!isGameRunning) return;
+            clearInterval(aviatorInterval); 
+            isGameRunning = false;
+            let win = Math.round(aviatorBetAmount * currentMultiplier);
+            currentBalance += win;
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+            document.getElementById("aviatorMsg").style.color = "#34d399";
+            document.getElementById("aviatorMsg").innerText = `Cashed Out! Win: PKR ${win}`;
+            resetAviator();
+        }
+
+        function resetAviator() {
+            let btn = document.getElementById("aviatorPlayBtn");
+            let cash = document.getElementById("btnCashout");
+            if(btn) btn.style.display = "block";
+            if(cash) cash.style.display = "none";
+        }
+
+        function playCoin(choice) {
+            let bet = parseInt(document.getElementById("coinBet").value);
+            let res = document.getElementById("coinResult");
+            if(!bet || bet <= 0 || bet > currentBalance) { res.style.color="#ef4444"; res.innerText="Invalid or Low Balance!"; return; }
+            let system = Math.random() > 0.5 ? 'HEAD' : 'TAIL';
+            if(choice === system) {
+                currentBalance += bet; res.style.color = "#34d399"; res.innerText = `Win! Result was ${system}`;
+            } else {
+                currentBalance -= bet; res.style.color = "#ef4444"; res.innerText = `Loss! Result was ${system}`;
+            }
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+        }
+
+        function playMines(btn) {
+            let bet = parseInt(document.getElementById("minesBet").value);
+            let res = document.getElementById("minesResult");
+            if(!bet || bet <= 0 || bet > currentBalance) { res.style.color="#ef4444"; res.innerText="Invalid or Low Balance!"; return; }
+            let isBomb = Math.random() < 0.33;
+            if(isBomb) {
+                btn.innerText = "💣"; btn.style.background = "#ef4444";
+                currentBalance -= bet; res.style.color = "#ef4444"; res.innerText = "BOOM! Hit a bomb.";
+            } else {
+                let reward = Math.round(bet * 1.5);
+                btn.innerText = "💎"; btn.style.background = "#059669";
+                currentBalance += Math.round(bet * 0.5); res.style.color = "#34d399"; res.innerText = `Diamond Found! Win: PKR ${reward}`;
+            }
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+        }
+
+        function spinWheel() {
+            let bet = parseInt(document.getElementById("wheelBet").value);
+            let res = document.getElementById("wheelResult");
+            if(!bet || bet <= 0 || bet > currentBalance) { res.style.color="#ef4444"; res.innerText="Invalid or Low Balance!"; return; }
+            let mults = [0, 1.5, 2, 0.5, 3];
+            let winMult = mults[Math.floor(Math.random() * mults.length)];
+            let winAmount = Math.round(bet * winMult);
+            currentBalance = currentBalance - bet + winAmount;
+            res.style.color = winMult >= 1 ? "#34d399" : "#ef4444";
+            res.innerText = `Wheel at ${winMult}x! Payout: PKR ${winAmount}`;
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+        }
+
+        function playDice(type) {
+            let bet = parseInt(document.getElementById("diceBet").value);
+            let res = document.getElementById("diceResult");
+            if(!bet || bet <= 0 || bet > currentBalance) { res.style.color="#ef4444"; res.innerText="Invalid or Low Balance!"; return; }
+            let rolled = Math.floor(Math.random() * 6) + 1;
+            let win = (type === 'low' && rolled <= 3) || (type === 'high' && rolled >= 4);
+            if(win) {
+                currentBalance += bet; res.style.color = "#34d399"; res.innerText = `Rolled ${rolled}! Win!`;
+            } else {
+                currentBalance -= bet; res.style.color = "#ef4444"; res.innerText = `Rolled ${rolled}! Lost.`;
+            }
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+        }
+
+        function playGeneralGame() {
+            let bet = parseInt(document.getElementById("generalBet").value);
+            let res = document.getElementById("generalResult");
+            if(!bet || bet <= 0 || bet > currentBalance) { res.style.color="#ef4444"; res.innerText="Invalid or Low Balance!"; return; }
+            let win = Math.random() > 0.5;
+            if(win) {
+                currentBalance += bet; res.style.color = "#34d399"; res.innerText = `Won PKR ${bet}`;
+            } else {
+                currentBalance -= bet; res.style.color = "#ef4444"; res.innerText = `Lost PKR ${bet}`;
+            }
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+        }
+
+        // Deposit & Withdraw Logic
+        function submitDeposit() {
+            let amt = parseInt(document.getElementById("depAmount").value);
+            let trx = document.getElementById("depTrx").value.trim();
+            if(!amt || !trx) { alert("Sab fields fill karein!"); return; }
+            depositRequests.push({ phone: currentUserPhone, amt, trx });
+            alert("Deposit Submitted Successfully!");
+            showPage('home');
+        }
+
+        function submitWithdraw() {
+            let method = document.getElementById("withdrawMethod").value;
+            let acc = document.getElementById("withdrawAccount").value.trim();
+            let amt = parseInt(document.getElementById("withdrawAmount").value);
+            let pinInput = document.getElementById("withdrawPin").value.trim();
+
+            if(!acc || !amt || !pinInput) { alert("Sab fields fill karein!"); return; }
+            if(amt < 500) { alert("Minimum withdraw amount 500 PKR hai!"); return; }
+            if(amt > currentBalance) { alert("Insufficient Balance!"); return; }
+
+            if (!currentUserPin) {
+                currentUserPin = pinInput;
+                alert("Withdraw PIN successfully set!");
+            } else if (currentUserPin !== pinInput) {
+                alert("Incorrect Withdraw PIN!");
+                return;
+            }
+
+            currentBalance -= amt;
+            document.getElementById("userBalance").innerText = currentBalance;
+            
+            let reqObj = { phone: currentUserPhone, method, acc, amt, status: 'Pending' };
+            withdrawRequests.push(reqObj);
+            userWithdrawHistory.push(reqObj);
+            
+            saveUserData();
+            renderWithdrawHistory();
+            alert("Withdrawal Request Submitted to Admin!");
+            showPage('home');
+        }
+
+        function renderWithdrawHistory() {
+            let list = document.getElementById("withdrawHistoryList");
+            if(userWithdrawHistory.length === 0) { list.innerHTML = "<p style='color:#9ca3af;'>No history yet.</p>"; return; }
+            list.innerHTML = "";
+            userWithdrawHistory.forEach(h => {
+                let color = h.status === 'Approved' ? '#34d399' : '#f59e0b';
+                list.innerHTML += `<div style="background:#1f2937; padding:6px 10px; margin:4px 0; border-radius:4px; border:1px solid #374151;">
+                    ${h.method} (${h.acc}) | PKR ${h.amt} - <b style="color:${color};">${h.status}</b>
+                </div>`;
+            });
+        }
+
+        // Admin Panel
+        function openAdminPanel() {
+            showPage('admin');
+            let lockScreen = document.getElementById("adminAuthLock");
+            let contentScreen = document.getElementById("adminContentSection");
+            if (isAdminUnlocked) {
+                lockScreen.style.display = "none";
+                contentScreen.style.display = "block";
+                renderAdmin();
+            } else {
+                lockScreen.style.display = "block";
+                contentScreen.style.display = "none";
+                document.getElementById("adminPinInput").value = "";
+                document.getElementById("adminPassMsg").innerText = "";
+            }
+        }
+
+        function verifyAdminPin() {
+            let enteredPin = document.getElementById("adminPinInput").value;
+            let msg = document.getElementById("adminPassMsg");
+            if (enteredPin === ADMIN_SECRET_PIN) {
+                isAdminUnlocked = true;
+                document.getElementById("adminAuthLock").style.display = "none";
+                document.getElementById("adminContentSection").style.display = "block";
+                renderAdmin();
+            } else {
+                msg.style.color = "#ef4444"; msg.innerText = "Incorrect PIN!";
+            }
+        }
+
+        function renderAdmin() {
+            let usrList = document.getElementById("allUsersList");
+            let users = JSON.parse(localStorage.getItem("m666_users") || "{}");
+            let keys = Object.keys(users);
+            if(keys.length === 0) {
+                usrList.innerHTML = "<p style='color:#9ca3af;'>No users found.</p>";
+            } else {
+                usrList.innerHTML = "";
+                keys.forEach(k => {
+                    let uData = users[k];
+                    usrList.innerHTML += `<div style="background:#111827; padding:5px 8px; margin:3px 0; border-radius:4px; border:1px solid #374151;">
+                        📞 <b>${k}</b> | Bal: <span style="color:#34d399;">PKR ${uData.balance}</span>
+                    </div>`;
+                });
+            }
+
+            let depList = document.getElementById("depositRequestsList");
+            if(depositRequests.length === 0) { 
+                depList.innerHTML = "<p style='color:#9ca3af;'>No pending deposits.</p>"; 
+            } else {
+                depList.innerHTML = "";
+                depositRequests.forEach((r, i) => {
+                    depList.innerHTML += `<div style="background:#1f2937; padding:8px; margin:4px 0; border-radius:5px; border:1px solid #374151;">
+                        User: ${r.phone} | Amt: PKR ${r.amt} | TRX: ${r.trx}<br>
+                        <button type="button" style="background:#10b981; border:none; padding:4px 8px; font-weight:bold; margin-top:5px; cursor:pointer;" onclick="approveDeposit(${i})">Approve Deposit</button>
+                    </div>`;
+                });
+            }
+
+            let wdList = document.getElementById("withdrawRequestsList");
+            if(withdrawRequests.length === 0) { 
+                wdList.innerHTML = "<p style='color:#9ca3af;'>No pending withdrawals.</p>"; 
+            } else {
+                wdList.innerHTML = "";
+                withdrawRequests.forEach((w, i) => {
+                    wdList.innerHTML += `<div style="background:#1f2937; padding:8px; margin:4px 0; border-radius:5px; border:1px solid #374151;">
+                        User: ${w.phone} | ${w.method} (${w.acc}) | PKR ${w.amt}<br>
+                        <button type="button" style="background:#10b981; border:none; padding:4px 8px; font-weight:bold; margin-top:5px; cursor:pointer;" onclick="approveWithdraw(${i})">Approve Withdraw</button>
+                    </div>`;
+                });
+            }
+        }
+
+        function approveDeposit(idx) {
+            let req = depositRequests[idx];
+            currentBalance += req.amt;
+            document.getElementById("userBalance").innerText = currentBalance;
+            saveUserData();
+            depositRequests.splice(idx, 1);
+            renderAdmin();
+            alert("Deposit Approved!");
+        }
+
+        function approveWithdraw(idx) {
+            let req = withdrawRequests[idx];
+            req.status = 'Approved';
+            saveUserData();
+            withdrawRequests.splice(idx, 1);
+            renderAdmin();
+            alert("Withdrawal Approved!");
+        }
+    </script>
+</body>
+</html>
